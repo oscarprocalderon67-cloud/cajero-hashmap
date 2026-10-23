@@ -25,4 +25,35 @@ public class CajeroModelo {
     public HashMap<Integer, Integer> getDispensador() {
         return dispensador;
     }
+    
+    
+    /**
+     * Calcula el saldo total disponible en el cajero
+     */
+    public long obtenerSaldoTotal() {
+        long total = 0;
+        for (int den : dispensador.keySet()) {
+            total += (long) den * dispensador.get(den);
+        }
+        return total;
+    }
+
+    /**
+     * Valida los límites y disponibilidad de dinero antes de procesar el retiro
+     */
+    public String validarRetiro(int monto) {
+        if (monto < 10000 || monto > 1000000) {
+            return "ERROR: El retiro mínimo es $10.000 y el máximo es $1.000.000.";
+        }
+
+        if (monto % 10000 != 0) {
+            return "ERROR: El monto ingresado debe ser múltiplo de $10.000.";
+        }
+
+        if (monto > obtenerSaldoTotal()) {
+            return "ERROR: El cajero no cuenta con saldo suficiente para esta transacción.";
+        }
+
+        return "OK";
+    }
 }
